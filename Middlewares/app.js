@@ -18,23 +18,30 @@ var sendPageNotFoundResponse = function(res){
     res.end('Page Not Found \n');
 }
 
-app.use((req, res, next) => {
-    // User authentication can be checked here
+app.use(function(req, res, next){
+    // check for authentication
     console.log(`My first Middleware`);
-    next();
+    var isAuthticated = true;
+    if(isAuthticated){
+        next();
+    }else{
+        res.statusCode = 401;
+        res.setHeader('Content-Type','text/plain'),
+        res.end('user not authenticated \n');
+    }
 })
 
-app.use((req, res, next) => {
-     // User authorisation can be checked here
+app.use(function(req, res, next){
+    // check authorization
     console.log(`My second Middleware`);
     next();
 })
 
 
-app.use(`/contact`,(req, res, next) => {
-    // User authorisation can be checked here
-   console.log(`My contact Middleware`);
-   next();
+app.use(`/downloads`,function(req, res, next){
+    // check anything
+    console.log(`My downloads Middleware`);
+    next();
 })
 
 app.use((req, res) => {
